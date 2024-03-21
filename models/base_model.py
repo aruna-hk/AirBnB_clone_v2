@@ -36,6 +36,8 @@ class BaseModel:
                 self.__dict__["created_at"] = datetime.utcnow()
             if "updated_at" not in self.__dict__:
                 self.__dict__["updated_at"] = datetime.utcnow()
+            if (id not in self.__dict__):
+                self.__dict__["id"] = str(uuid.uuid4())
 
     def __str__(self):
         """Returns a string representation of the instance"""
