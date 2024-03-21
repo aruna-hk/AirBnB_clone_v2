@@ -1,8 +1,8 @@
--- database setup
--- user setup
-create user if not exists 'hbnb_dev'@'localhost' identified by "hbnb_dev_pwd";
-create database if not exists hbnb_dev_db;
-use hbnb_dev_db;
-grant all privileges on hbnb_dev_db.* to 'hbnb_dev'@'localhost';
-use mysql;
-grant select on perfomance_schema.* to 'hbnb_dev'@'localhost';
+-- DATABASE setup
+-- USEr setup
+CREATE USER IF NOT EXISTS 'hbnb_dev'@'localhost' IDENTIFIED BY "hbnb_dev_pwd";
+CREATE DATABASE IF NOT EXISTS hbnb_dev_db;
+USE hbnb_dev_db;
+GRANT ALL PRIVILEGES ON hbnb_dev_db.* TO 'hbnb_dev'@'localhost';
+USE mysql;
+GRANT SELECT ON perfomance_schema.* TO 'hbnb_dev'@'localhost';
