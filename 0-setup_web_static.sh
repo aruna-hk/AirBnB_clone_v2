@@ -15,14 +15,20 @@ mkdir -p /data/web_static/shared; #shared directory --pracexp
 mkdir -p /data/web_static/releases; #released for production
 mkdir -p /data/web_static/releases/test; # test for directory
 #test file
-echo "text file " > /data/web_static/releases/test/index.html
+echo "<html>
+  <head>
+  </head>
+  <body>
+    Holberton School
+  </body>
+</html>" > /data/web_static/releases/test/index.html
 
 #create symlink to test directory
 rm -f /data/web_static/current;
 ln -s /data/web_static/releases/test /data/web_static/current
 
 #changing owner of data folder to ubuntu
-chown -R hk:hk /data
+chown -R ubuntu:ubuntu /data
 
 #remove nginx default serving folder
 rm -rf /var/www
