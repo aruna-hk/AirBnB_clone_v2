@@ -1,27 +1,20 @@
 #!/usr/bin/python3
-"""
-    pack web static web pages for upload
-    to  the server
-"""
-
-from os import path, mkdir
+""" prepares files for deployment """
+import os.path
 from datetime import datetime
-from fabric import task
-from invoke import run
+from fabric.api import local
 
 
-@task
-def do_pack(c):
+def do_pack():
+    """creating archive to deploy"""
 
-    """Create a tar gzipped archive of the directory web_static."""
-    now = datetime.utcnow().strftime("%Y%M%D%H%M%S").replace('/', '')
-    tarball = "web_static_{}.tgz".format(now)
-    if path.isdir("versions") is False:
-        run("mkdir -p versions")
-    else:
-        tar_path = "versions" + "/" + tarball
-        print("Packing web_static to {}\n".format(tar_path))
-        if run("tar -cvzf {} web_static".format(tar_path)).exited == 0:
-            print("\nDone.")
-            return tar_path
-    return None
+    date = datetime.utcnow()
+    now = str(date.year) + str(date.mont) + str(date.day) + str(date.hour) + \
+            str(date.minute) + str(date.second)
+    file = "versions/web_static_{}.tgz".format(now)
+    if os.path.isdir("versions") is False:
+        if local("mkdir -p versions").failed is True:
+            return None
+    if local("tar -cvzf {} web_static".format(file)).failed is True:
+        return None
+    return file
