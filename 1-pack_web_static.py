@@ -6,7 +6,7 @@
 
 from os import path
 from datetime import datetime
-from fabric.api import run
+from fabric.api import local
 
 
 def do_pack():
@@ -18,10 +18,10 @@ def do_pack():
     tarball = "web_static_{}.tgz".format(now)
 
     if path.isdir("versions") is False:
-        run("mkdir versions")
+        local("mkdir versions")
     tar_path = "versions" + "/" + tarball
     print("Packing web_static to {}".format(tar_path))
-    if run("tar -cvzf {} web_static".format(tar_path)):
+    if local("tar -cvzf {} web_static".format(tar_path)):
         print("\nDone.")
         return tar_path
 
