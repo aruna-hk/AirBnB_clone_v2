@@ -4,23 +4,24 @@
     to  the server
 """
 
-from os import path, mkdir
+from os import path
 from datetime import datetime
-from fabric import task
-from invoke import run
+from fabric.api import run
 
 
-@task
-def do_pack(c):
+def do_pack():
 
-    """Create a tar gzipped archive of the directory web_static."""
+    """create web pages archive to upload to server."""
+
     now = datetime.utcnow().strftime("%Y%M%D%H%M%S").replace('/', '')
+
     tarball = "web_static_{}.tgz".format(now)
+
     if path.isdir("versions") is False:
-        run("mkdir -p versions")
+        run("mkdir versions")
     tar_path = "versions" + "/" + tarball
-    print("Packing web_static to {}\n".format(tar_path))
-    if run("tar -cvzf {} web_static".format(tar_path)).exited == 0:
+    print("Packing web_static to {}".format(tar_path))
+    if run("tar -cvzf {} web_static".format(tar_path)):
         print("\nDone.")
         return tar_path
 
