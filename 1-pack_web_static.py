@@ -1,28 +1,21 @@
 #!/usr/bin/python3
 """
-    pack web static web pages for upload
-    to  the server
+   preparing/ packing wb pages for upload
 """
-
-from os import path
-from datetime import datetime
+from os import path, mkdir
 from fabric.api import local
+from datetime import datetime
 
 
 def do_pack():
-
-    """create web pages archive to upload to server."""
-
+    """
+        pack web pages to .tgz file for upload
+    """
     now = datetime.utcnow().strftime("%Y%M%D%H%M%S").replace('/', '')
 
-    tarball = "web_static_{}.tgz".format(now)
-
     if path.isdir("versions") is False:
-        local("mkdir versions")
-    tar_path = "versions" + "/" + tarball
-    print("Packing web_static to {}".format(tar_path))
-    if local("tar -cvzf {} web_static".format(tar_path)):
-        print("\nDone.")
-        return tar_path
-
+        mkdir("versions")
+    version = "versions/web_static_" + now + ".tgz"
+    if (local("tar -cvzf {} web_static".format(version)).succeeded):
+        return version
     return None
