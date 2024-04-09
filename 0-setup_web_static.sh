@@ -1,19 +1,27 @@
 #!/usr/bin/env bash
-#install nginx
-#setup server directories
+############SERVER CONFIG SCRIPT###################
 
 apt-get update -y
 apt-get install nginx -y
 
-#server configuration
-#configure listening port /etc/nginx/sites-available/default file
+service nginx start
 
-#directories and file setup
-mkdir -p /data/; #root web directory
-mkdir -p /data/web_static; #static web pages directory
-mkdir -p /data/web_static/shared; #shared directory --pracexp
-mkdir -p /data/web_static/releases; #released for production
-mkdir -p /data/web_static/releases/test; # test for directory
+#prepare serving directory
+
+#remove default root
+rm -rf /var/www
+
+
+#############SITE CONFIGURATION ##########################
+#remove default config sites -- sites available directory
+rm -rf /etc/nginx/sites-available
+
+#root directory preparation
+mkdir -p /data; mkdir -p /data/web_static
+mkdir -p /data/web_static/shared
+mkdir -p /data/web_static/releases
+mkdir -p /data/web_static/releases/test
+
 #test file
 echo "<html>
   <head>
@@ -23,34 +31,47 @@ echo "<html>
   </body>
 </html>" > /data/web_static/releases/test/index.html
 
-#create symlink to test directory
-rm -f /data/web_static/current;
-ln -s /data/web_static/releases/test /data/web_static/current
+#remove symlink if exist
+rm -rf /data/web_static/current
+#create symlink to shared version
+ln -s /data/web_static/releases/test/ /data/web_static/current
 
-#changing owner of data folder to ubuntu
-chown -R ubuntu:ubuntu /data
 
-#remove nginx default serving folder
-rm -rf /var/www
+#config string
+echo "#===nginx config file==
+#----------------------------
+user x230;
+worker_processes auto;
+pid /run/nginx.pid;
+error_log /var/log/nginx/error.log;
 
-#server config file content
-echo "#server config file
-#listen port 80 all ip addresses -- http requests
-server {
-	#port
-	listen 80 default_server;
-	server_name _;
+events {
+	worker_connections 768;
+	# multi_accept on;
+}
 
-	#header setup
-	add_header X-Served-y \$hostname;
+http {
 
-	#location block to be served
+	#server
+	server {
+		#listen on port 80 all ip addresses
+		listen 80 default_server;
+		#ipv6 all
+		listen [::]:80 default_server;
 
-	location /hbnb_static {
-		alias /data/web_static/current/;
+		#access log file
+		access_log /var/log/nginx/access.log;
+		#add header servicing server in server farm
+		add_header X-Served_By \$hostname;
+		location /hbnb_static {
+			alias /data/web_static/current;
+		}
 	}
-}" > /etc/nginx/sites-available/default
+}
+" > /etc/nginx/nginx.conf
 
-#write config file
+#give nginx directories to user/ non root
+chown -R x230 /data
+chown -R x230 /etc/nginx
 
 service nginx restart
