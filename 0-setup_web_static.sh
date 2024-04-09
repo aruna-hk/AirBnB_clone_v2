@@ -40,7 +40,7 @@ ln -s /data/web_static/releases/test/ /data/web_static/current
 #config string
 echo "#===nginx config file==
 #----------------------------
-user x230;
+user ubuntu;
 worker_processes auto;
 pid /run/nginx.pid;
 error_log /var/log/nginx/error.log;
@@ -71,7 +71,7 @@ http {
 " > /etc/nginx/nginx.conf
 
 #give nginx directories to user/ non root
-chown -R x230 /data
-chown -R x230 /etc/nginx
+chown -R ubuntu /data
+chown -R ubuntu /etc/nginx
 
 service nginx restart
