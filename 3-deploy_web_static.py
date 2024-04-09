@@ -27,7 +27,7 @@ def do_deploy(archive_path):
             archive_path.split('.')[0].split('/')[1] + "/"
         run("mkdir -p {}".format(release_dir))
         run("tar -xzf {} -C {}".format(remote, release_dir))
-        run("rm -rf {}".format(remote))
+        run("rm {}".format(remote))
         run("rm -rf /data/web_static/current")
         run("mv {}web_static/* {}".format(release_dir, release_dir))
         run("rm -rf {}web_static".format(release_dir))
@@ -55,6 +55,7 @@ def deploy():
     """ full deployment"""
 
     tarball = do_pack()
-    if tarball is None:
+    if (tarball is None):
         return False
-    return do_deploy(tarball)
+    server_status = do_deploy(tarball)
+    return server_status
