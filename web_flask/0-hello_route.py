@@ -12,5 +12,5 @@ if __name__ == "__main__":
     """ run the app"""
     from flask import Flask
     app = Flask(__name__)
-    app.add_url_rule("/", "hello", hello)
+    app.add_url_rule("/", "hello", hello, strict_slashes=False)
     app.run(host="0.0.0.0", port=5000)
