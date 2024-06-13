@@ -64,3 +64,7 @@ class FileStorage:
             FileStorage.__objects.pop(key)
         except KeyError as e:
             pass
+
+    def close():
+        """close file"""
+        self.reload()
