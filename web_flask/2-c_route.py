@@ -21,7 +21,7 @@ def hbnb():
 @app.route("/c/<text>", strict_slashes=False)
 def c(text):
     """ parametized url """
-    return "c {}".format(text.replace('_', ' '))
+    return "C {}".format(text.replace('_', ' '))
 
 
 @app.route("/python/<text>", strict_slashes=False)
